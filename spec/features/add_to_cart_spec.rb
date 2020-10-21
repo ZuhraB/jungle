@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "User adds product to cart", type: :feature, js: true do
-      # SETUP
+RSpec.feature "AddToCarts", type: :feature, js: true do
   before :each do
     @category = Category.create! name: 'Apparel'
 
@@ -16,11 +15,21 @@ RSpec.feature "User adds product to cart", type: :feature, js: true do
     end
   end
 
-  scenario 'user clicks add to cart button' do
-    visit '/'
+  scenario "They see all products" do
+    # ACT
+    visit root_path
+
+    # DEBUG
+    save_screenshot
+
+    # VERIFY
+    expect(page).to have_css 'article.product', count: 10
+  end
+
+  scenario 'Adds to cart' do
+    visit root_path
     first('article').find('footer').first('a').click
-    sleep(3)
-    # save_screenshot
+    save_screenshot
     expect(page).to have_content('My Cart (1)')
   end
 end
